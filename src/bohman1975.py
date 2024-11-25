@@ -1,5 +1,6 @@
 from math import *
 import scipy.stats as stats
+from cmath import exp
 
 from src.сhr_func import ChrFunc
 
@@ -56,7 +57,7 @@ class C(ChrFunc):
             if v == 0:
                 continue
             p = self.delta * v
-            F += ((exp(- (p ** 2)) - self.phi(p)) / (2 * pi * 1j * v)) * exp(-1j * p * x)
+            F += ((exp(- (p ** 2) / 2) - self.phi(p)) / (2 * pi * 1j * v)) * exp(-1j * p * x)
         return F
 
 
