@@ -1,6 +1,7 @@
 import numpy as np
+from numpy import exp, pi, cos, sin
 import matplotlib.pyplot as plt
-from mpmath import *
+from scipy.stats import norm
 
 class ChrFunc:
     def __init__(self, phi):
@@ -24,8 +25,6 @@ class ChrFunc:
         plt.legend()
         plt.show()
 
-
-import scipy.stats as stats
 
 # Straight on
 class A(ChrFunc):
@@ -66,7 +65,7 @@ class B(ChrFunc):
         return F
 
 
-# Reducing importance of trigonometric series by considering difference between F and 
+# Reducing importance of trigonometric series by considering difference between F and
 class C(ChrFunc):
     def __init__(self, N, delta, phi):
         super().__init__(phi)
@@ -74,7 +73,7 @@ class C(ChrFunc):
         self.delta = delta
 
     def cdf(self, x):
-        F = stats.norm.cdf(x, loc=0, scale=1)
+        F = norm.cdf(x, loc=0, scale=1)
         for v in range(1 - self.N, self.N):
             if v == 0:
                 continue
@@ -101,7 +100,7 @@ class D(ChrFunc):
         return H
 
     def cdf(self, x):
-        F = stats.norm.cdf(x, loc=0, scale=1) + self.__H(x, self.delta)
+        F = norm.cdf(x, loc=0, scale=1) + self.__H(x, self.delta)
         d = (2 * pi) / (self.N * self.delta)
         for v in range(1, self.K):
             L = self.N // self.K
@@ -137,7 +136,7 @@ class E(ChrFunc):
         return G
 
     def cdf(self, x):
-        F = stats.norm.cdf(x, loc=0, scale=1) + self.__G(x, self.delta)
+        F = norm.cdf(x, loc=0, scale=1) + self.__G(x, self.delta)
         d = (2 * pi) / (self.N * self.delta)
         for v in range(1, self.K):
             L = self.N // self.K
