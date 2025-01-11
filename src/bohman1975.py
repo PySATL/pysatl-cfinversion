@@ -138,9 +138,9 @@ class E(ChrFunc):
     def cdf(self, x):
         F = norm.cdf(x, loc=0, scale=1) + self.__G(x, self.delta)
         d = (2 * pi) / (self.N * self.delta)
+        L = self.N // self.K
+        delta_1 = self.delta / self.K
+        d_1 = self.K * d
         for v in range(1, self.K):
-            L = self.N // self.K
-            delta_1 = self.delta / self.K
-            d_1 = self.K * d
             F -= self.__G(x + v * L * d_1, delta_1)
         return F

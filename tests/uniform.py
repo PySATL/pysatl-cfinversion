@@ -1,3 +1,4 @@
+import numpy as np
 from numpy import exp
 
 class Unif:
@@ -9,8 +10,9 @@ class Unif:
       return (exp(1j * x * self.b) - exp(1j * x * self.a)) / (1j * x * (self.b - self.a))
 
   def cdf(self, x):
-      if x < self.a:
-        return 0
-      if x >= self.b:
-        return 1
-      return (x - self.a) / (self.b - self.a)
+      x = np.asarray(x)
+      result = np.zeros_like(x)
+      result[x >= self.b] = 1
+      result[(x >= self.a) & (x < self.b)] = (x[(x >= self.a) & (x < self.b)] - self.a) / (self.b - self.a)
+
+      return result

@@ -1,5 +1,5 @@
 from numpy import exp
-from scipy import norm
+from scipy.stats import norm
 
 class Norm:
   def __init__(self, m, var):
