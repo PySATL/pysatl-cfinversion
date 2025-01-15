@@ -8,6 +8,12 @@ from src.CharFuncInverter import CharFuncInverter
 class BohmanA(CharFuncInverter):
     """Straight on"""
 
+    """
+    N - positive integer
+    delta - positive quantity
+    d = 2pi / N*delta
+    """
+
     def __init__(self, N=1e3, delta=1e-1):
         super().__init__()
         self.N = int(N)
@@ -137,11 +143,11 @@ class BohmanE(CharFuncInverter):
     def __C(self, t):
         result = np.zeros_like(t)
 
-        t_negative = t[t < 0]
-        result[t < 0] = (1 + t_negative) * cos(pi * -t_negative) + sin(pi * -t_negative) / pi
+        t_negative = t[(t >= -1) & (t <= 0)]
+        result[(t >= -1) & (t <= 0)] = (1 + t_negative) * cos(pi * -t_negative) + sin(pi * -t_negative) / pi
 
-        t_between = t[(0 <= t) & (t <= 1)]
-        result[(0 <= t) & (t <= 1)] = (1 - t_between) * cos(pi * t_between) + sin(pi * t_between) / pi
+        t_positive = t[(0 <= t) & (t <= 1)]
+        result[(0 <= t) & (t <= 1)] = (1 - t_positive) * cos(pi * t_positive) + sin(pi * t_positive) / pi
 
         return result
 
