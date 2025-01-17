@@ -12,13 +12,13 @@ def read_pipenv_dependencies(fname):
 
 if __name__ == '__main__':
     setup(
-        name='demo',
+        name='CharFuncInverter',
         version=os.getenv('PACKAGE_VERSION', '0.0.dev0'),
         package_dir={'': 'src'},
         packages=find_packages('src', include=[
-            'demo*'
+            'CharFuncInverter*'
         ]),
-        description='A demo package.',
+        description='A package for characteristic functions inversion.',
         install_requires=[
               *read_pipenv_dependencies('Pipfile.lock'),
         ]
