@@ -2,7 +2,7 @@ import numpy as np
 from numpy import pi, exp, sin, cos
 from scipy.stats import norm
 
-from src.CharFuncInverter import CharFuncInverter
+from src.CharFuncInverter.CharFuncInverter import CharFuncInverter
 
 
 class BohmanA(CharFuncInverter):
@@ -116,7 +116,7 @@ class BohmanD(CharFuncInverter):
         exp_coeff = np.sum(exp_matrix, axis=1)
 
         self.coeff_2 = - (exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
-                2 * pi * 1j * self.delta_1)
+                2 * pi * 1j * v_values) * exp_coeff
 
     def cdf(self, X):
         v = np.arange(1 - self.N, self.N)
@@ -156,7 +156,6 @@ class BohmanE(CharFuncInverter):
         v_values = v_values[v_values != 0]
 
         С_values = self.__C(v_values / self.N)
-        C_values = np.ones_like(v_values)
 
         self.coeff_1 = С_values * (exp(-((self.delta * v_values) ** 2) / 2) - phi(self.delta * v_values)) / (
                 2 * pi * 1j * v_values)
@@ -170,8 +169,8 @@ class BohmanE(CharFuncInverter):
         exp_matrix = np.exp(-1j * self.delta_1 * v_values[:, np.newaxis] * i_values * L * d_1)
         exp_coeff = np.sum(exp_matrix, axis=1)
 
-        self.coeff_2 = -(exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
-                2 * pi * 1j * self.delta_1)
+        self.coeff_2 = -С_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
+                2 * pi * 1j * v_values)) * exp_coeff
 
     def cdf(self, X):
         v = np.arange(1 - self.N, self.N)
