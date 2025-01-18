@@ -4,7 +4,6 @@ from scipy.stats import norm
 
 from src.CharFuncInverter.CharFuncInverter import CharFuncInverter
 
-
 class BohmanA(CharFuncInverter):
     """Straight on"""
 

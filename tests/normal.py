@@ -11,3 +11,6 @@ class Norm:
 
   def cdf(self, x):
       return norm.cdf(x, loc=self.m, scale=self.var)
+
+  def pdf(self, x):
+      return norm.pdf(x, loc=self.m, scale=self.var)
