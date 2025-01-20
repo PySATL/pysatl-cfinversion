@@ -16,3 +16,8 @@ class Unif:
       result[(x >= self.a) & (x < self.b)] = (x[(x >= self.a) & (x < self.b)] - self.a) / (self.b - self.a)
 
       return result
+
+  def pdf(self, x):
+      result = np.zeros_like(x)
+      result[(x >= self.a) & (x < self.b)] = 1 / (self.b - self.a)
+      return result
