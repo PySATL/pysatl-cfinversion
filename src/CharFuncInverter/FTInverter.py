@@ -7,6 +7,7 @@ class FFTInverterNaive(CharFuncInverter):
 
     def __init__(self, N=1e3, delta=1e-1):
         super().__init__()
+        self.phi = None
         self.N = int(N)
         self.delta = delta
         self.num_points = N / delta
@@ -22,7 +23,7 @@ class FFTInverterNaive(CharFuncInverter):
         integral = np.trapezoid((phi_t * np.exp(-1j * t * x)) / (1j * t), t)
         return 1 / 2 - (1 / (2 * np.pi)) * integral
 
-    def pdf(self, x, num_points=1000):
+    def pdf(self, x):
         t = np.linspace(-self.N, self.N, self.num_points)
 
         phi_t = self.phi(t)
