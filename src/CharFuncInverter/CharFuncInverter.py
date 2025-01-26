@@ -1,17 +1,53 @@
+from abc import abstractmethod
 from typing import Callable
 
 import numpy as np
 
 
 class CharFuncInverter:
-    def __init__(self):
-        pass
+    """Abstract class for characteristic function inverter"""
 
-    def fit(self, phi: Callable):
-        pass
+    @abstractmethod
+    def fit(self, phi: Callable) -> None:
+        """Function for setting or changing characteristic function
 
-    def cdf(self, x: np.ndarray):
-        pass
+        Attributes
+        ----------
+        phi : Callable
+              characteristic function
+        """
+        raise NotImplementedError
 
-    def pdf(self, x: np.ndarray):
-        pass
+    @abstractmethod
+    def cdf(self, x: np.ndarray) -> np.ndarray:
+        """Function return cumulative distribution function
+
+        Attributes
+        ----------
+        x : np.ndarray
+            Data for which we want to calculate
+            the value of the cumulative distribution function
+
+        Return
+        ------
+        np.ndarray
+            The value of the cumulative distribution function for each element x
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def pdf(self, x: np.ndarray) -> np.ndarray:
+        """Function return probability density function
+
+        Attributes
+        ----------
+        x : np.ndarray
+            Data for which we want to calculate
+            the value of the probability density function
+
+        Return
+        ------
+        np.ndarray
+            The value of the probability density function for each element x
+        """
+        raise NotImplementedError
