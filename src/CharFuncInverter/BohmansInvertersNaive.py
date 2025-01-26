@@ -3,6 +3,7 @@ from numpy import exp, pi, cos, sin
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
+
 class ChrFunc:
     def __init__(self, phi):
         self.phi = phi

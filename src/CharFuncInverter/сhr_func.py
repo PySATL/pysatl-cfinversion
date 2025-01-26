@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class ChrFunc:
 
     def __init__(self, phi):
@@ -25,5 +26,3 @@ class ChrFunc:
         plt.grid()
         plt.legend()
         plt.show()
-
-
