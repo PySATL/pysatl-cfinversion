@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import src.CharFuncInverter.Bohman.BohmansInverters as BI
+import cfinvert.CharFuncInverter.Bohman.BohmansInverters as BI
 
 
 
@@ -45,9 +45,6 @@ def bochmans_testcase(inv, eps):
 
     assert MSE < eps
 
-
-def test():
-    pass
 
 def test_bochman_a(parameters_setup):
     N, delta, _ = parameters_setup

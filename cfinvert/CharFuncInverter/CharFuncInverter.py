@@ -16,6 +16,7 @@ class CharFuncInverter:
         phi : Callable
               characteristic function
         """
+
         raise NotImplementedError
 
     @abstractmethod

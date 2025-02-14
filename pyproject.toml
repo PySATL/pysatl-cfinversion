@@ -1,18 +1,20 @@
 [project]
-name = "CharFuncInverter"
+name = "cfinvert"
 version = "0.1.0"
 description = "A package for characteristic functions inversion."
 authors = [
     {name = "Liliia Imamutdinova"}
 ]
-
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
-
+repository = "https://github.com/lilyreber/Numerical-inversion-of-characteristic-functions"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.6"

@@ -4,7 +4,7 @@ import numpy as np
 from numpy import pi, exp
 from scipy.stats import norm
 
-from src.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from cfinvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
 
 
 class BohmanA(BohmanMethod):
@@ -88,7 +88,7 @@ class BohmanC(BohmanMethod):
 
         F_x = norm.cdf(X, loc=0, scale=1) + (exp(-1j * self.delta * x_vect) @ self.coeff)
 
-        return F_x
+        return F_x.real
 
 
 class BohmanD(BohmanMethod):
@@ -127,7 +127,7 @@ class BohmanD(BohmanMethod):
         F_x = norm.cdf(X, loc=0, scale=1) + (exp(-1j * x_vect * self.delta) @ self.coeff_1) + (
                 exp(-1j * x_vect * self.delta_1) @ self.coeff_2)
 
-        return F_x
+        return F_x.real
 
 
 class BohmanE(BohmanMethod):
@@ -170,4 +170,4 @@ class BohmanE(BohmanMethod):
 
         F_x = norm.cdf(X, loc=0, scale=1) + (exp(-1j * x_vect * self.delta) @ self.coeff_1) + (
                 exp(-1j * x_vect * self.delta_1) @ self.coeff_2)
-        return F_x
+        return F_x.real
