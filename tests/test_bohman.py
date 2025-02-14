@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-import src.CharFuncInverter.BohmansInverters as BI
+import src.CharFuncInverter.Bohman.BohmansInverters as BI
+
 
 
 @pytest.fixture(scope="function")
@@ -45,6 +46,9 @@ def bochmans_testcase(inv, eps):
     assert MSE < eps
 
 
+def test():
+    pass
+
 def test_bochman_a(parameters_setup):
     N, delta, _ = parameters_setup
     inv = BI.BohmanA(N, delta)
@@ -73,3 +77,4 @@ def test_bochman_e(parameters_setup):
     N, delta, K = parameters_setup
     inv = BI.BohmanE(N, delta, K)
     bochmans_testcase(inv, 417e4)
+
