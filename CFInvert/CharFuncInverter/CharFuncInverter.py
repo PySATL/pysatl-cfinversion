@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Callable
+from typing import Callable, Union
 
 import numpy as np
 
@@ -20,7 +20,7 @@ class CharFuncInverter:
         raise NotImplementedError
 
     @abstractmethod
-    def cdf(self, x: np.ndarray) -> np.ndarray:
+    def cdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
         """Function return cumulative distribution function
 
         Attributes
@@ -37,7 +37,7 @@ class CharFuncInverter:
         raise NotImplementedError
 
     @abstractmethod
-    def pdf(self, x: np.ndarray) -> np.ndarray:
+    def pdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
         """Function return probability density function
 
         Attributes

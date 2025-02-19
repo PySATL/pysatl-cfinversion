@@ -1,23 +1,26 @@
 from typing import Callable
 
+import numpy as np
 from numpy import exp, pi, cos, sin
 from scipy.stats import norm
 
-from cfinvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from CFInvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
 
 
 # Straight on
 class A(BohmanMethod):
-    def __init__(self, N, delta):
+    def __init__(self, N: int, delta: float) -> None:
         super().__init__()
         self.phi = None
         self.N = int(N)
         self.delta = delta
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, phi: Callable[[float], complex]) -> None:
         self.phi = phi
 
-    def cdf(self, x):
+    def cdf(self, x: float) -> np.ndarray:
+        if self.phi is None:
+            raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         F = 0.5 + (self.delta * x) / (2 * pi)
         for v in range(1 - self.N, self.N):
             if v == 0:
@@ -29,13 +32,13 @@ class A(BohmanMethod):
 # Battling the truncation error by deforming F
 class B(BohmanMethod):
 
-    def __init__(self, N, delta):
+    def __init__(self, N: int, delta: float) -> None:
         super().__init__()
         self.phi = None
         self.N = int(N)
         self.delta = delta
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, phi: Callable[[float], complex]) -> None:
         self.phi = phi
 
     def __C(self, t):
@@ -45,7 +48,9 @@ class B(BohmanMethod):
             return self.__C(-t)
         return (1 - t) * cos(pi * t) + sin(pi * t) / pi
 
-    def cdf(self, x):
+    def cdf(self, x: float) -> complex:
+        if self.phi is None:
+            raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         F = 0.5 + (self.delta * x) / (2 * pi)
         for v in range(1 - self.N, self.N):
             if v == 0:
@@ -56,16 +61,18 @@ class B(BohmanMethod):
 
 # Reducing importance of trigonometric series by considering difference between F and
 class C(BohmanMethod):
-    def __init__(self, N, delta):
+    def __init__(self, N: int, delta: float):
         super().__init__()
         self.phi = None
         self.N = int(N)
         self.delta = delta
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, phi: Callable[[float], complex]) -> None:
         self.phi = phi
 
-    def cdf(self, x):
+    def cdf(self, x: float) -> complex:
+        if self.phi is None:
+            raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         F = norm.cdf(x, loc=0, scale=1)
         for v in range(1 - self.N, self.N):
             if v == 0:
@@ -77,17 +84,17 @@ class C(BohmanMethod):
 
 # Reducing the aliasing error and reducing importance of trigonometric series
 class D(BohmanMethod):
-    def __init__(self, N, delta, K):
+    def __init__(self, N: int, delta: float, K: float):
         super().__init__()
         self.phi = None
         self.N = int(N)
         self.delta = delta
         self.K = K
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, phi: Callable[[float], complex]) -> None:
         self.phi = phi
 
-    def __H(self, x, delta):
+    def __H(self, x: float, delta: float) -> complex:
         H = 0
         for v in range(1 - self.N, self.N):
             if v == 0:
@@ -96,7 +103,9 @@ class D(BohmanMethod):
             H += ((exp(- (p ** 2) / 2) - self.phi(p)) / (2 * pi * 1j * v)) * exp(-1j * p * x)
         return H
 
-    def cdf(self, x):
+    def cdf(self, x: float) -> complex:
+        if self.phi is None:
+            raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         F = norm.cdf(x, loc=0, scale=1) + self.__H(x, self.delta)
         d = (2 * pi) / (self.N * self.delta)
         for v in range(1, self.K):
@@ -110,24 +119,24 @@ class D(BohmanMethod):
 # Reducing the aliasing error and Reducing importance of trigonometric
 # series and Battling the truncation error by deforming F
 class E(BohmanMethod):
-    def __init__(self, N, delta, K):
+    def __init__(self,  N: int, delta: float, K: float):
         super().__init__()
         self.phi = None
         self.N = int(N)
         self.delta = delta
         self.K = K
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, phi: Callable[[float], complex]) -> None:
         self.phi = phi
 
-    def __C(self, t):
+    def __C(self, t: float) -> float:
         if t > 1:
             return 0
         if t < 0:
             return self.__C(-t)
         return (1 - t) * cos(pi * t) + sin(pi * t) / pi
 
-    def __G(self, x, delta):
+    def __G(self, x: float, delta: float) -> np.ndarray:
         G = 0
         for v in range(1 - self.N, self.N):
             if v == 0:
@@ -136,7 +145,9 @@ class E(BohmanMethod):
             G += self.__C(v / self.N) * ((exp(- (p ** 2) / 2) - self.phi(p)) / (2 * pi * 1j * v)) * exp(-1j * p * x)
         return G
 
-    def cdf(self, x):
+    def cdf(self, x: np.ndarray) -> np.ndarray:
+        if self.phi is None:
+            raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         F = norm.cdf(x, loc=0, scale=1) + self.__G(x, self.delta)
         d = (2 * pi) / (self.N * self.delta)
         L = self.N // self.K

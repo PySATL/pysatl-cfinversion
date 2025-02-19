@@ -1,10 +1,8 @@
 from typing import Callable
-
 import numpy as np
 from numpy import pi, exp
 from scipy.stats import norm
-
-from cfinvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from CFInvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
 
 
 class BohmanA(BohmanMethod):
@@ -18,10 +16,13 @@ class BohmanA(BohmanMethod):
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1) -> None:
         super().__init__()
-        self.N = N
-        self.delta = delta
+        self.N: int = N
+        self.delta: float = delta
+        self.coeff_0: float = 0.5
+        self.coeff_1: float = 0.0
+        self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable[[np.ndarray], complex]) -> None:
+    def fit(self, phi: Callable) -> None:
         self.coeff_0 = 0.5
         self.coeff_1 = self.delta / (2 * pi)
 
@@ -30,7 +31,7 @@ class BohmanA(BohmanMethod):
 
         self.coeff = phi(self.delta * v_values) / (2 * pi * 1j * v_values)
 
-    def cdf(self, X: np.ndarray) -> np.ndarray[float]:
+    def cdf(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -46,10 +47,13 @@ class BohmanB(BohmanMethod):
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1) -> None:
         super().__init__()
-        self.N = N
-        self.delta = delta
+        self.N: int = N
+        self.delta: float = delta
+        self.coeff_0: float = 0.5
+        self.coeff_1: float = 0.0
+        self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable[[np.ndarray], complex]) -> None:
+    def fit(self, phi: Callable) -> None:
         self.coeff_0 = 0.5
         self.coeff_1 = self.delta / (2 * pi)
 
@@ -57,7 +61,7 @@ class BohmanB(BohmanMethod):
         v_values = v_values[v_values != 0]
         self.coeff = super()._C(v_values / self.N) * phi(self.delta * v_values) / (2 * pi * 1j * v_values)
 
-    def cdf(self, X: np.ndarray) -> np.ndarray[float]:
+    def cdf(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -73,10 +77,11 @@ class BohmanC(BohmanMethod):
 
     def __init__(self, N: float = 1e3, delta: float = 1e-1) -> None:
         super().__init__()
-        self.N = int(N)
-        self.delta = delta
+        self.N: int = int(N)
+        self.delta: float = delta
+        self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable[[np.ndarray], complex]) -> None:
+    def fit(self, phi: Callable) -> None:
         self.coeff = np.array([((exp(- ((self.delta * v) ** 2) / 2) - phi(self.delta * v)) / (2 * pi * 1j * v)) for v in
                                range(1 - self.N, self.N) if v != 0])
 
@@ -96,12 +101,14 @@ class BohmanD(BohmanMethod):
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1, K: int = 2) -> None:
         super().__init__()
-        self.N = N
-        self.delta = delta
-        self.K = K
-        self.delta_1 = self.delta / self.K
+        self.N: int = N
+        self.delta: float = delta
+        self.K: int = K
+        self.delta_1: float = self.delta / self.K
+        self.coeff_1: np.ndarray = np.array([])
+        self.coeff_2: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable[[np.ndarray], complex]) -> None:
+    def fit(self, phi: Callable) -> None:
         self.coeff_1 = np.array([(exp(-((self.delta * v) ** 2) / 2) - phi(self.delta * v)) / (2 * pi * 1j * v) for v in
                                  range(1 - self.N, self.N) if v != 0])
         L = self.N // self.K
@@ -118,7 +125,7 @@ class BohmanD(BohmanMethod):
         self.coeff_2 = - (exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
                 2 * pi * 1j * v_values) * exp_coeff
 
-    def cdf(self, X):
+    def cdf(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -136,12 +143,14 @@ class BohmanE(BohmanMethod):
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1, K: int = 4) -> None:
         super().__init__()
-        self.N = N
-        self.delta = delta
-        self.K = K
-        self.delta_1 = self.delta / self.K
+        self.N: int = N
+        self.delta: float = delta
+        self.K: int = K
+        self.delta_1: float = self.delta / self.K
+        self.coeff_1: np.ndarray = np.array([])
+        self.coeff_2: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable[[np.ndarray], complex]) -> None:
+    def fit(self, phi: Callable) -> None:
         v_values = np.arange(1 - self.N, self.N)
         v_values = v_values[v_values != 0]
 
@@ -162,7 +171,7 @@ class BohmanE(BohmanMethod):
         self.coeff_2 = -С_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
                 2 * pi * 1j * v_values)) * exp_coeff
 
-    def cdf(self, X: np.ndarray) -> None:
+    def cdf(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 

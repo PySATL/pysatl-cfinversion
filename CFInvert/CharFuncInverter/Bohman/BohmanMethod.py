@@ -3,12 +3,15 @@ from typing import Type
 
 import numpy as np
 
-from cfinvert.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from CFInvert.CharFuncInverter.CharFuncInverter import CharFuncInverter
 
 
 class BohmanMethod(CharFuncInverter, ABC):
     """Abstract class for characteristic function inverter,
-    which are implemented using the methods described by Harald Bohman in 1975"""
+    which are implemented using the methods described by Harald Bohman in 1975
+
+    Bohmans methods allows to implement only cumulative distribution function
+    """
 
     @staticmethod
     def _C(t: np.ndarray) -> np.ndarray:
@@ -23,6 +26,3 @@ class BohmanMethod(CharFuncInverter, ABC):
 
         return result
 
-    def pdf(self, x: np.ndarray) -> Type[NotImplementedError]:
-        """Bohmans methods allows to implement only cumulative distribution function"""
-        return NotImplementedError

@@ -14,11 +14,11 @@ def read_pipenv_dependencies(fname):
 
 if __name__ == '__main__':
     setup(
-        name='cfinvert',
+        name='CFInvert',
         version=os.getenv('PACKAGE_VERSION', '0.0.dev0'),
-        package_dir={'': 'cfinvert'},
-        packages=find_packages('cfinvert', include=[
-            'cfinvert*'
+        package_dir={'': 'CFInvert'},
+        packages=find_packages('CFInvert', include=[
+            'CFInvert*'
         ]),
         description='A package for characteristic functions inversion.',
         install_requires=[
