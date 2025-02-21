@@ -1,13 +1,12 @@
-[project]
+[tool.poetry]
 name = "CFInvert"
 version = "0.1.0"
 description = "A package for characteristic functions inversion."
 authors = [
-    {name = "Liliia Imamutdinova"}
+    "Liliia Imamutdinova"
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10"
 repository = "https://github.com/lilyreber/Numerical-inversion-of-characteristic-functions"
 
 [tool.poetry.dependencies]
