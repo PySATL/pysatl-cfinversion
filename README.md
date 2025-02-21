@@ -22,7 +22,62 @@ poetry install
 ```
 
 ## Usage example
- 
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+import CFInvert.CharFuncInverter.Bohman.BohmansInverters as bi
+from CFInvert.Distributions.uniform import Unif 
+from CFInvert.Standardizer import Standardizer
+
+# Uniform distribution parameters
+a = -100
+b = 20
+unif_distr = Unif(a, b)
+
+# Create an array of points for plotting
+t = np.linspace(-200, 200, 1000)
+
+# Calculate the exact distribution function for uniform distribution 
+unif_cdf = unif_distr.cdf(t)
+
+# Standardization of a random variable
+m = (a + b) / 2  # Expectation
+var = ((b - a) ** 2) / 12  # Variance
+st = Standardizer(m=m, sd=(var**0.5))
+
+# The characteristic function of a standardized random variable
+z_chr = st.standardize_chf(unif_distr.chr)
+
+# Initialization and configuration of the inverter (Bohmann method)
+inverter = bi.BohmanE(N=1e3)
+inverter.fit(z_chr)
+
+# Approximate distribution function for a standardized random variable
+approx_z_cdf = inverter.cdf
+
+# Approximate distribution function for the initial random variable
+approx_cdf = st.unstandardize_cdf(approx_z_cdf)
+approx_cdf_values = approx_cdf(t)
+
+# Plotting graphs
+plt.figure(figsize=(10, 6))
+plt.plot(t, unif_cdf, label="The exact distribution function", linewidth=2, color="blue")
+plt.plot(t, approx_cdf_values, label="Approximate distribution function", linestyle="--", linewidth=2, color="red")
+
+plt.title("Comparison of exact and approximate distribution functions", fontsize=16)
+plt.xlabel("x", fontsize=14)
+plt.ylabel("F(x)", fontsize=14)
+plt.legend(fontsize=12)
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.axvline(x=a, color="green", linestyle=":", label=f"a = {a}")
+plt.axvline(x=b, color="purple", linestyle=":", label=f"b = {b}")
+plt.legend(fontsize=12)
+plt.tight_layout()
+
+plt.show()
+```
+![example](examples/plots/uniform.png)
 
 ## Requirements
 
