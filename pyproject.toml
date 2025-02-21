@@ -7,11 +7,11 @@ authors = [
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 repository = "https://github.com/lilyreber/Numerical-inversion-of-characteristic-functions"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.10"
 numpy = ">=2.0.2"
 scipy = ">=1.15.0"
 matplotlib = ">=3.9.3"
