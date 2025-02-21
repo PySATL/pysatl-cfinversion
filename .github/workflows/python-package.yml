@@ -33,11 +33,11 @@ jobs:
 
     - name: Set up dependencies
       run: |
-        poetry install
+        poetry install --no-root
 
     - name: Test with pytest
       run: |
-        poetry run pytest
+        poetry run pytest 
 
     - name: Type checking
       run: poetry run mypy .
