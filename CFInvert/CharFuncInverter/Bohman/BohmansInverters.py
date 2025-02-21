@@ -154,9 +154,9 @@ class BohmanE(BohmanMethod):
         v_values = np.arange(1 - self.N, self.N)
         v_values = v_values[v_values != 0]
 
-        С_values = super()._C(v_values / self.N)
+        C_values = super()._C(v_values / self.N)
 
-        self.coeff_1 = С_values * (exp(-((self.delta * v_values) ** 2) / 2) - phi(self.delta * v_values)) / (
+        self.coeff_1 = C_values * (exp(-((self.delta * v_values) ** 2) / 2) - phi(self.delta * v_values)) / (
                 2 * pi * 1j * v_values)
 
         L = self.N // self.K
@@ -168,7 +168,7 @@ class BohmanE(BohmanMethod):
         exp_matrix = np.exp(-1j * self.delta_1 * v_values[:, np.newaxis] * i_values * L * d_1)
         exp_coeff = np.sum(exp_matrix, axis=1)
 
-        self.coeff_2 = -С_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
+        self.coeff_2 = -C_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
                 2 * pi * 1j * v_values)) * exp_coeff
 
     def cdf(self, X: np.ndarray) -> np.ndarray:
