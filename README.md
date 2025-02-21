@@ -81,7 +81,7 @@ plt.show()
 
 ## Requirements
 
-- python 3.12+
-- numpy 2.0.2+
+- python 3.10+
+- numpy 2.2.0+
 - scipy 1.15.0+
 - matplotlib 3.9.3+
