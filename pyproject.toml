@@ -14,7 +14,6 @@ python = ">=3.10"
 numpy = ">=2.2.0"
 scipy = ">=1.15.0"
 matplotlib = ">=3.9.3"
-pytest = ">=8.3.4"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -25,6 +24,8 @@ build-backend = "poetry.core.masonry.api"
 ruff = "^0.9.6"
 pytest = "^8.3.4"
 mypy = "^1.15.0"
+notebook = "^7.4.1"
+
 
 [tool.ruff]
 line-length = 88
