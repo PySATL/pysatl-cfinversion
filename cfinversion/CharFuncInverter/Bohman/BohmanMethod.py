@@ -3,7 +3,7 @@ from typing import Type
 
 import numpy as np
 
-from CFInvert.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from cfinversion.CharFuncInverter.CharFuncInverter import CharFuncInverter
 
 
 class BohmanMethod(CharFuncInverter, ABC):

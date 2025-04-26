@@ -4,7 +4,7 @@ import numpy as np
 from typing import Optional, Union
 from numpy import exp
 
-from CFInvert.Distributions.AbstractDistribution import AbstractDistribution
+from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
 
 
 class Poisson():

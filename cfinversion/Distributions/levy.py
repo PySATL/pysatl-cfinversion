@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.special import erfc
 
-from CFInvert.Distributions.AbstractDistribution import AbstractDistribution
+from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
 
 
 class Levy(AbstractDistribution):

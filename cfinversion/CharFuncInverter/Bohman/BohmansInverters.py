@@ -2,7 +2,7 @@ from typing import Callable
 import numpy as np
 from numpy import pi, exp
 from scipy.stats import norm
-from CFInvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from cfinversion.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
 
 
 class BohmanA(BohmanMethod):

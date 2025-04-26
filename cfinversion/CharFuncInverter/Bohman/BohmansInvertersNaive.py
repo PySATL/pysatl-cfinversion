@@ -4,7 +4,7 @@ import numpy as np
 from numpy import exp, pi, cos, sin
 from scipy.stats import norm
 
-from CFInvert.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from cfinversion.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
 
 
 # Straight on

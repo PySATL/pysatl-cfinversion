@@ -1,7 +1,7 @@
 Views
 =====
 
-.. automodule:: CFInvert.CharFuncInverter
+.. automodule:: cfinversion.CharFuncInverter
    :members:
    :undoc-members:
 

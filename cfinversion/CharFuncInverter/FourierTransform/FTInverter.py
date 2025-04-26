@@ -1,6 +1,6 @@
 from typing import Callable, Optional, NoReturn, Union
 import numpy as np
-from CFInvert.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from cfinversion.CharFuncInverter.CharFuncInverter import CharFuncInverter
 
 
 class FTInverterNaive(CharFuncInverter):
