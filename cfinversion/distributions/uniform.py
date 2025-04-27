@@ -3,7 +3,7 @@ from numpy import exp
 from typing import Union
 
 
-class Unif:
+class Uniform:
     def __init__(self, a: float, b: float) -> None:
         self.a: float = a
         self.b: float = b

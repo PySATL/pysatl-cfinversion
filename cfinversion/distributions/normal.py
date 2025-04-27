@@ -4,7 +4,7 @@ from scipy.stats import norm
 
 from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
 
-class Norm(AbstractDistribution):
+class Normal(AbstractDistribution):
     def __init__(self, m: float, var: float) -> None:
         """
         Конструктор класса Norm.
@@ -31,7 +31,7 @@ class Norm(AbstractDistribution):
         :param x: аргумент функции распределения
         :return: значение функции распределения в точке x
         """
-        return norm.cdf(x, loc=self.m, scale=self.var)
+        return norm.cdf(x, loc=self.m, scale=np.sqrt(self.var))
 
     def pdf(self,  x: np.ndarray) -> np.ndarray:
         """
