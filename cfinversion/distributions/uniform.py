@@ -9,6 +9,12 @@ class Uniform:
         self.b: float = b
 
     def chr(self, x: Union[float, np.ndarray]) -> Union[complex, np.ndarray]:
+        if isinstance(x, np.ndarray):
+            result = np.ones_like(x, np.complex128)
+            result[x != 0] = (exp(1j * x[x != 0] * self.b) - exp(1j * x[ x!= 0] * self.a)) / (1j * x[x != 0] * (self.b - self.a))
+            return result
+        if x == 0.0:
+            return 1.0 + 0.0j
         return (exp(1j * x * self.b) - exp(1j * x * self.a)) / (1j * x * (self.b - self.a))
 
     def cdf(self, x: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
