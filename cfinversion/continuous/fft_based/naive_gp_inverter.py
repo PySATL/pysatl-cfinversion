@@ -20,12 +20,11 @@ class NaiveGPInverter(ContinuousInverter):
             raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
 
         t: np.ndarray = np.linspace(-self.N, self.N, self.num_points)
-        phi_t = self.phi(t)
-
-        integral = np.trapezoid(
-            (phi_t * np.exp(-1j * t * x[:, np.newaxis])) / (1j * t), t, axis=1
-        )
-
+        phi_t = self.phi(t) 
+        tq = (phi_t * np.exp(-1j * t * x[:, np.newaxis])) 
+        tq[:, t != 0] /= (1j * t[t!=0])
+        tq[:, t == 0] = -x.reshape(100,1)
+        integral = np.trapezoid(tq, t, axis=1)
         return 1 / 2 - (1 / (2 * np.pi)) * integral
 
     def pdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
