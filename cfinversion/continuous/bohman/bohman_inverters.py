@@ -2,10 +2,10 @@ from typing import Callable
 import numpy as np
 from numpy import pi, exp
 from scipy.stats import norm
-from cfinversion.CharFuncInverter.Bohman.BohmanMethod import BohmanMethod
+from .abstract_bohman_inverter import AbstractBohmanInverter
 
 
-class BohmanA(BohmanMethod):
+class BohmanA(AbstractBohmanInverter):
     """Straight on"""
 
     """
@@ -42,7 +42,7 @@ class BohmanA(BohmanMethod):
         return F_x.real
 
 
-class BohmanB(BohmanMethod):
+class BohmanB(AbstractBohmanInverter):
     """Battling the truncation error by deforming F"""
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1) -> None:
@@ -72,7 +72,7 @@ class BohmanB(BohmanMethod):
         return F_x.real
 
 
-class BohmanC(BohmanMethod):
+class BohmanC(AbstractBohmanInverter):
     """Reducing importance of trigonometric series by considering difference between F and <I>"""
 
     def __init__(self, N: float = 1e3, delta: float = 1e-1) -> None:
@@ -96,7 +96,7 @@ class BohmanC(BohmanMethod):
         return F_x.real
 
 
-class BohmanD(BohmanMethod):
+class BohmanD(AbstractBohmanInverter):
     """Reducing the aliasing error and reducing importance of trigonometric series"""
 
     def __init__(self, N: int = int(1e3), delta: float = 1e-1, K: int = 2) -> None:
@@ -137,7 +137,7 @@ class BohmanD(BohmanMethod):
         return F_x.real
 
 
-class BohmanE(BohmanMethod):
+class BohmanE(AbstractBohmanInverter):
     """Reducing the aliasing error and Reducing importance of trigonometric
     series and Battling the truncation error by deforming F"""
 

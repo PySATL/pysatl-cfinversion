@@ -1,10 +1,9 @@
 from typing import Callable, Optional, NoReturn, Union
 import numpy as np
-from cfinversion.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from ..continuous_inverter import ContinuousInverter
 
 
-class FTInverterNaive(CharFuncInverter):
-
+class NaiveGPInverter(ContinuousInverter):
     def __init__(self, N: float = 1e3, delta: float = 1e-1, num_points: Optional[int] = None) -> None:
         super().__init__()
         self.N: int = int(N)

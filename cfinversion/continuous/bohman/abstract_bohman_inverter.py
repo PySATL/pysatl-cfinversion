@@ -3,10 +3,10 @@ from typing import Type
 
 import numpy as np
 
-from cfinversion.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from ..continuous_inverter import ContinuousInverter
 
 
-class BohmanMethod(CharFuncInverter, ABC):
+class AbstractBohmanInverter(ContinuousInverter, ABC):
     """Abstract class for characteristic function inverter,
     which are implemented using the methods described by Harald Bohman in 1975
 
