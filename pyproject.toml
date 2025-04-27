@@ -3,7 +3,8 @@ name = "cfinversion"
 version = "0.1.0"
 description = "A package for characteristic functions inversion."
 authors = [
-    "Liliia Imamutdinova"
+    "Liliia Imamutdinova",
+    "Mikhail Mikhailov"
 ]
 license = "MIT"
 readme = "README.md"
