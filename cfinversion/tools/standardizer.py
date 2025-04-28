@@ -5,23 +5,23 @@ import numpy as np
 
 class Standardizer:
 
-    def __init__(self, loc: float | None, scale: float | None) -> None:
+    def __init__(self, loc: float | None = None, scale: float | None = None) -> None:
         """
         the class makes transitions between random variable and standardized random variable
 
         :param loc: location
         :param scale: scale
         """
-        self.loc = loc
-        self.scale = scale
+        self.loc = loc or 0.0
+        self.scale = scale or 1.0
 
     def fit(self, cf: Callable, tol_diff : float = 1e-4) -> None: 
         self.cf_true = cf
         cft = [cf(i * tol_diff) for i in range(1,5)]
         mean = (-3 * np.imag(cft[3]) + 32 * np.imag(cft[2]) - 168 * np.imag(cft[1]) + 672 * np.imag(cft[0])) / (420 * tol_diff) # estimated mean
         var  = (9 * np.real(cft[3]) - 128 * np.real(cft[2]) + 1008 * np.real(cft[1]) - 8064 * np.real(cft[0]) + 7175) / (2520 * tol_diff**2) # estimated variance
-        self.loc = self.loc or mean
-        self.scale = self.scale or np.sqrt(var - mean**2)
+        self.loc = mean
+        self.scale = np.sqrt(var - mean**2)
 
     def cf(self, x): 
         """

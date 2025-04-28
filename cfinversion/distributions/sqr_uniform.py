@@ -33,6 +33,7 @@ class UniformSquared:
         return result
 
     def pdf(self, x: Union[float, np.ndarray]) -> np.ndarray:
-        result = np.zeros_like(x)
-        result[(x > self.a) & (x < self.b)] = 1 / (2 * np.sqrt(self.b - self.a)  * np.sqrt(x[(x > self.a) & (x < self.b)] - self.a))
+        x_arr = np.asarray(x)
+        result = np.zeros_like(x_arr)
+        result[(x_arr > self.a) & (x_arr < self.b)] = 1 / (2 * np.sqrt(self.b - self.a)  * np.sqrt(x_arr[(x_arr > self.a) & (x_arr < self.b)] - self.a))
         return result

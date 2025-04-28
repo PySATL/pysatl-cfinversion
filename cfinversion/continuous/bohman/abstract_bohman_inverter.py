@@ -4,7 +4,7 @@ from typing import Type
 import numpy as np
 
 from ..continuous_inverter import ContinuousInverter
-
+from ...tools import Standardizer
 
 class AbstractBohmanInverter(ContinuousInverter, ABC):
     """Abstract class for characteristic function inverter,
@@ -12,6 +12,8 @@ class AbstractBohmanInverter(ContinuousInverter, ABC):
 
     Bohmans methods allows to implement only cumulative distribution function
     """
+    def __init__(self):
+        self.standardizer = Standardizer()
 
     @staticmethod
     def _C(t: np.ndarray) -> np.ndarray:

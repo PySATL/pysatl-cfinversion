@@ -14,4 +14,4 @@ def lre(v_true: np.ndarray, v: np.ndarray) -> np.ndarray:
     return -np.log10(np.abs((v_true - v) / v_true))
 
 def l0_err(f: Callable, tol_diff:float = 1e-3) -> float:
-    return 1 - sp.integrate.quad(f, -np.inf, np.inf, epsabs = tol_diff)
+    return 1 - sp.integrate.quad(f, -np.inf, np.inf, epsabs = tol_diff)[0]
