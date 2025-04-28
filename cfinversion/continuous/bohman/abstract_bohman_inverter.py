@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Type
 
 import numpy as np
@@ -25,4 +25,41 @@ class AbstractBohmanInverter(ContinuousInverter, ABC):
         result[(0 <= t) & (t <= 1)] = (1 - t_positive) * np.cos(np.pi * t_positive) + np.sin(np.pi * t_positive) / np.pi
 
         return result
+    
+    def cdf(self, x: np.ndarray) -> np.ndarray:
+        """Function return cumulative distribution function
 
+        Attributes
+        ----------
+        x : np.ndarray
+            Data for which we want to calculate
+            the value of the cumulative distribution function
+
+        Return
+        ------
+        np.ndarray
+            The value of the cumulative distribution function for each element x
+        """
+        return self.standardizer.unstandardize_cdf(self.cdf_)(x)
+
+    def pdf(self, x: np.ndarray) -> np.ndarray:
+        """Function return probability density function
+
+        Attributes
+        ----------
+        x : np.ndarray
+            Data for which we want to calculate
+            the value of the probability density function
+
+        Return
+        ------
+        np.ndarray
+            The value of the probability density function for each element x
+        """
+        raise NotImplementedError
+
+
+    @abstractmethod
+    def cdf_(self, x: np.ndarray) -> np.ndarray:
+        """Internal variant for standardized cf"""
+        pass

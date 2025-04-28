@@ -3,7 +3,7 @@ import numpy as np
 from numpy import pi, exp
 from scipy.stats import norm
 from .abstract_bohman_inverter import AbstractBohmanInverter
-
+from ...tools import Standardizer
 
 class BohmanA(AbstractBohmanInverter):
     """Straight on"""
@@ -22,16 +22,22 @@ class BohmanA(AbstractBohmanInverter):
         self.coeff_1: float = 0.0
         self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, cf: Callable, loc: float | None = None, scale : float | None = None) -> None:
+        
+        self.standardizer = Standardizer(loc = loc, scale = scale)
+        self.standardizer.fit(cf)
+        self.cf_ = self.standardizer.cf
+
         self.coeff_0 = 0.5
         self.coeff_1 = self.delta / (2 * pi)
 
         v_values = np.arange(1 - self.N, self.N)
         v_values = v_values[v_values != 0]
 
-        self.coeff = phi(self.delta * v_values) / (2 * pi * 1j * v_values)
+        self.coeff = self.cf_(self.delta * v_values) / (2 * pi * 1j * v_values)
 
-    def cdf(self, X: np.ndarray) -> np.ndarray:
+
+    def cdf_(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -53,15 +59,19 @@ class BohmanB(AbstractBohmanInverter):
         self.coeff_1: float = 0.0
         self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, cf: Callable, loc : float | None = None, scale : float | None = None) -> None:
+        self.standardizer = Standardizer(loc = loc, scale = scale)
+        self.standardizer.fit(cf)
+        self.cf_ = self.standardizer.cf
+        
         self.coeff_0 = 0.5
         self.coeff_1 = self.delta / (2 * pi)
 
         v_values = np.arange(1 - self.N, self.N)
         v_values = v_values[v_values != 0]
-        self.coeff = super()._C(v_values / self.N) * phi(self.delta * v_values) / (2 * pi * 1j * v_values)
+        self.coeff = super()._C(v_values / self.N) * self.cf_(self.delta * v_values) / (2 * pi * 1j * v_values)
 
-    def cdf(self, X: np.ndarray) -> np.ndarray:
+    def cdf_(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -81,16 +91,19 @@ class BohmanC(AbstractBohmanInverter):
         self.delta: float = delta
         self.coeff: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable) -> None:
-        self.coeff = np.array([((exp(- ((self.delta * v) ** 2) / 2) - phi(self.delta * v)) / (2 * pi * 1j * v)) for v in
+    def fit(self, cf: Callable, loc : float | None = None, scale : float | None = None) -> None:
+        self.standardizer = Standardizer(loc = loc, scale = scale)
+        self.standardizer.fit(cf)
+        self.cf_ = self.standardizer.cf
+        
+        self.coeff = np.array([((exp(- ((self.delta * v) ** 2) / 2) - self.cf_(self.delta * v)) / (2 * pi * 1j * v)) for v in
                                range(1 - self.N, self.N) if v != 0])
 
-    def cdf(self, X: np.ndarray) -> np.ndarray:
+    def cdf_(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
         x_vect = np.outer(X, v_non_zero)
-
         F_x = norm.cdf(X, loc=0, scale=1) + (exp(-1j * self.delta * x_vect) @ self.coeff)
 
         return F_x.real
@@ -108,8 +121,12 @@ class BohmanD(AbstractBohmanInverter):
         self.coeff_1: np.ndarray = np.array([])
         self.coeff_2: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable) -> None:
-        self.coeff_1 = np.array([(exp(-((self.delta * v) ** 2) / 2) - phi(self.delta * v)) / (2 * pi * 1j * v) for v in
+    def fit(self, cf: Callable, loc : float | None = None, scale : float | None = None) -> None:
+        self.standardizer = Standardizer(loc = loc, scale = scale)
+        self.standardizer.fit(cf)
+        self.cf_ = self.standardizer.cf
+
+        self.coeff_1 = np.array([(exp(-((self.delta * v) ** 2) / 2) - self.cf_(self.delta * v)) / (2 * pi * 1j * v) for v in
                                  range(1 - self.N, self.N) if v != 0])
         L = self.N // self.K
         d = (2 * pi) / (self.N * self.delta)
@@ -122,10 +139,10 @@ class BohmanD(AbstractBohmanInverter):
         exp_matrix = np.exp(-1j * self.delta_1 * v_values[:, np.newaxis] * i_values * L * d_1)
         exp_coeff = np.sum(exp_matrix, axis=1)
 
-        self.coeff_2 = - (exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
+        self.coeff_2 = - (exp(-((self.delta_1 * v_values) ** 2) / 2) - self.cf_(self.delta_1 * v_values)) / (
                 2 * pi * 1j * v_values) * exp_coeff
 
-    def cdf(self, X: np.ndarray) -> np.ndarray:
+    def cdf_(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
@@ -150,13 +167,17 @@ class BohmanE(AbstractBohmanInverter):
         self.coeff_1: np.ndarray = np.array([])
         self.coeff_2: np.ndarray = np.array([])
 
-    def fit(self, phi: Callable) -> None:
+    def fit(self, cf: Callable, loc : float | None = None, scale : float | None = None) -> None:
+        self.standardizer = Standardizer(loc = loc, scale = scale)
+        self.standardizer.fit(cf)
+        self.cf_ = self.standardizer.cf
+        
         v_values = np.arange(1 - self.N, self.N)
         v_values = v_values[v_values != 0]
 
         С_values = super()._C(v_values / self.N)
 
-        self.coeff_1 = С_values * (exp(-((self.delta * v_values) ** 2) / 2) - phi(self.delta * v_values)) / (
+        self.coeff_1 = С_values * (exp(-((self.delta * v_values) ** 2) / 2) - self.cf_(self.delta * v_values)) / (
                 2 * pi * 1j * v_values)
 
         L = self.N // self.K
@@ -168,10 +189,10 @@ class BohmanE(AbstractBohmanInverter):
         exp_matrix = np.exp(-1j * self.delta_1 * v_values[:, np.newaxis] * i_values * L * d_1)
         exp_coeff = np.sum(exp_matrix, axis=1)
 
-        self.coeff_2 = -С_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - phi(self.delta_1 * v_values)) / (
+        self.coeff_2 = -С_values * ((exp(-((self.delta_1 * v_values) ** 2) / 2) - self.cf_(self.delta_1 * v_values)) / (
                 2 * pi * 1j * v_values)) * exp_coeff
 
-    def cdf(self, X: np.ndarray) -> np.ndarray:
+    def cdf_(self, X: np.ndarray) -> np.ndarray:
         v = np.arange(1 - self.N, self.N)
         v_non_zero = v[v != 0]
 
