@@ -26,9 +26,9 @@ poetry install
 import numpy as np
 import matplotlib.pyplot as plt
 
-import CFInvert.CharFuncInverter.Bohman.BohmansInverters as bi
-from CFInvert.Distributions.uniform import Unif 
-from CFInvert.Standardizer import Standardizer
+import cfinversion.CharFuncInverter.Bohman.BohmansInverters as bi
+from cfinversion.Distributions.uniform import Unif 
+from cfinversion.Standardizer import Standardizer
 
 # Uniform distribution parameters
 a = -100

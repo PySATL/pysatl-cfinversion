@@ -1,10 +1,9 @@
 from typing import Callable, Optional, NoReturn, Union
 import numpy as np
-from CFInvert.CharFuncInverter.CharFuncInverter import CharFuncInverter
+from ..continuous_inverter import ContinuousInverter
 
 
-class FTInverterNaive(CharFuncInverter):
-
+class NaiveGPInverter(ContinuousInverter):
     def __init__(self, N: float = 1e3, delta: float = 1e-1, num_points: Optional[int] = None) -> None:
         super().__init__()
         self.N: int = int(N)
@@ -21,12 +20,11 @@ class FTInverterNaive(CharFuncInverter):
             raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
 
         t: np.ndarray = np.linspace(-self.N, self.N, self.num_points)
-        phi_t = self.phi(t)
-
-        integral = np.trapezoid(
-            (phi_t * np.exp(-1j * t * x[:, np.newaxis])) / (1j * t), t, axis=1
-        )
-
+        phi_t = self.phi(t) 
+        tq = (phi_t * np.exp(-1j * t * x[:, np.newaxis])) 
+        tq[:, t != 0] /= (1j * t[t!=0])
+        tq[:, t == 0] = -x.reshape(100,1)
+        integral = np.trapezoid(tq, t, axis=1)
         return 1 / 2 - (1 / (2 * np.pi)) * integral
 
     def pdf(self, x: np.ndarray) -> Union[float, np.ndarray]:

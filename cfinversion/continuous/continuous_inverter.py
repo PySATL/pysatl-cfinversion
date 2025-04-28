@@ -4,7 +4,7 @@ from typing import Callable, Union
 import numpy as np
 
 
-class CharFuncInverter:
+class ContinuousInverter:
     """Abstract class for characteristic function inverter"""
 
     @abstractmethod

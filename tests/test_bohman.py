@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import CFInvert.CharFuncInverter.Bohman.BohmansInverters as BI
+import cfinversion.continuous.bohman as BI
 
 
 
