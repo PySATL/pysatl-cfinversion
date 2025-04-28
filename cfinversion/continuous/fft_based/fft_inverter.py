@@ -2,10 +2,10 @@ from typing import Callable, Union
 import numpy as np
 from scipy.interpolate import interp1d
 
-from continuous import ContinuousInverter
+from cfinversion.continuous import ContinuousInverter
 
 
-class FTTInverter(ContinuousInverter):
+class FFTInverter(ContinuousInverter):
 
     def __init__(self, N: float = 2 ** 8, A: float = -6, B: float = 6) -> None:
         super().__init__()
