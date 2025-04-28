@@ -4,8 +4,6 @@ import numpy as np
 from typing import Optional, Union
 from numpy import exp
 
-from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
-
 
 class Poisson():
     def __init__(self, mean: float) -> None:

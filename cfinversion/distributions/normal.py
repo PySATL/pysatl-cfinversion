@@ -2,9 +2,7 @@ import numpy as np
 from numpy import exp
 from scipy.stats import norm
 
-from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
-
-class Normal(AbstractDistribution):
+class Normal():
     def __init__(self, m: float, var: float) -> None:
         """
         Конструктор класса Norm.

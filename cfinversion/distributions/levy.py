@@ -1,10 +1,8 @@
 import numpy as np
 from scipy.special import erfc
 
-from cfinversion.Distributions.AbstractDistribution import AbstractDistribution
 
-
-class Levy(AbstractDistribution):
+class Levy():
     def __init__(self, c: float, mu: float) -> None:
         self.c = c
         self.mu = mu
