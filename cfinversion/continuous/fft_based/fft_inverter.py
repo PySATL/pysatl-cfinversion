@@ -20,8 +20,7 @@ class FFTInverter(ContinuousInverter):
         self.j = np.arange(N)
         self.Y = A + self.k * self.dy
         self.t = -self.T + self.j * self.dt
-        self.phi = None
-        self.pdf_values = None
+        self.phi = None #type: Callable[[np.ndarray], np.ndarray] | None
 
     def fit(self, phi: Callable[[np.ndarray], np.ndarray]) -> None:
         """phi = characteristic function"""
@@ -30,11 +29,11 @@ class FFTInverter(ContinuousInverter):
         f = np.exp(-1j * self.j * self.dt * self.A) * self.phi(self.t)
         C = (self.dt / (2 * np.pi)) * np.exp(1j * self.T * self.Y)
 
-        self.pdf_values = np.real(C * np.fft.fft(f))
+        self.pdf_values = np.real(C * np.fft.fft(f)) #type: np.ndarray
         self.pdf_interp = interp1d(self.Y, self.pdf_values, kind='linear')
 
-        self.cdf_values = np.cumsum(self.pdf_values) * self.dy
-        self.cdf_interp = interp1d(self.Y, self.cdf_values, kind='linear')
+        self.cdf_values = np.cumsum(self.pdf_values) * self.dy #type: np.ndarray
+        self.cdf_interp = interp1d(self.Y, self.cdf_values, kind='linear') 
 
     def cdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
         if self.phi is None:
