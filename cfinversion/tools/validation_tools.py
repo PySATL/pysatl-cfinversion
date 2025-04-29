@@ -11,7 +11,8 @@ def lre(v_true: np.ndarray, v: np.ndarray) -> np.ndarray:
     :param v: predicted value
     :return: log relative error
     """
-    return -np.log10(np.abs((v_true - v) / v_true))
+    rel_errors = np.abs((v_true[v_true != 0] - v[v_true != 0]) / v_true[v_true != 0])
+    return -np.log10(rel_errors[rel_errors != 0])
 
 def l0_err(f: Callable, tol_diff:float = 1e-3) -> float:
     return 1 - sp.integrate.quad(f, -np.inf, np.inf, epsabs = tol_diff)[0]
