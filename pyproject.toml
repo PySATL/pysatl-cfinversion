@@ -14,7 +14,6 @@ repository = "https://github.com/PySATL/pysatl-cfinversion"
 python = ">=3.10"
 numpy = ">=2.2.0"
 scipy = ">=1.15.0"
-matplotlib = ">=3.9.3"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -25,10 +24,16 @@ build-backend = "poetry.core.masonry.api"
 ruff = "^0.9.6"
 pytest = "^8.3.4"
 mypy = "^1.15.0"
-notebook = "^7.4.1"
 scipy-stubs = "^1.15.2.2"
 finufft = "^2.3.1"
 
+
+
+[tool.poetry.group.notebooks.dependencies]
+matplotlib = ">=3.9.3"
+notebook = "^7.4.1"
+tol-colors = "^1.4.0"
+pandas = "^2.2.3"
 
 [tool.ruff]
 line-length = 88

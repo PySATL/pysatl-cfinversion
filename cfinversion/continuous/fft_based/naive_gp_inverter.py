@@ -23,7 +23,7 @@ class NaiveGPInverter(ContinuousInverter):
         phi_t = self.phi(t) 
         tq = (phi_t * np.exp(-1j * t * x[:, np.newaxis])) 
         tq[:, t != 0] /= (1j * t[t!=0])
-        tq[:, t == 0] = -x.reshape(100,1)
+        tq[:, t == 0] = -x.reshape(-1,1)
         integral = np.trapezoid(tq, t, axis=1)
         return 1 / 2 - (1 / (2 * np.pi)) * integral
 
