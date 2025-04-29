@@ -44,7 +44,7 @@ class AbstractBohmanInverter(ContinuousInverter, ABC):
         """
         return self.standardizer.unstandardize_cdf(self.cdf_)(x)
 
-    def pdf(self, x: np.ndarray) -> np.ndarray:
+    def pdf(self, x: np.ndarray, tol_diff:float = 1e-4) -> np.ndarray:
         """Function return probability density function
 
         Attributes
@@ -58,7 +58,7 @@ class AbstractBohmanInverter(ContinuousInverter, ABC):
         np.ndarray
             The value of the probability density function for each element x
         """
-        raise NotImplementedError
+        return (self.cdf(x+tol_diff)-self.cdf(x-tol_diff))/(2 * tol_diff)
 
 
     @abstractmethod

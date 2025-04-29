@@ -2,7 +2,7 @@ from typing import Callable, Union
 import numpy as np
 from scipy.interpolate import interp1d
 
-from cfinversion.continuous import ContinuousInverter
+from ..continuous_inverter import ContinuousInverter
 
 
 class FFTInverter(ContinuousInverter):

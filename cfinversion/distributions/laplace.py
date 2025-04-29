@@ -31,8 +31,8 @@ class Laplace():
         :return: The value of the distribution function.
         """
         result: np.ndarray = np.zeros_like(x)
-        result[x <= self.m] = 0.5 * exp((x - self.m) / self.b)
-        result[x > self.m] = 1 - 0.5 * exp(-(x - self.m) / self.b)
+        result[x <= self.m] = 0.5 * exp((x[x <= self.m] - self.m) / self.b)
+        result[x > self.m] = 1 - 0.5 * exp(-(x[x > self.m] - self.m) / self.b)
         return result
 
     def pdf(self, x: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
