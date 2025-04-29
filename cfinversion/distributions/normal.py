@@ -2,9 +2,8 @@ import numpy as np
 from numpy import exp
 from scipy.stats import norm
 
-from CFInvert.Distributions.AbstractDistribution import AbstractDistribution
 
-class Norm(AbstractDistribution):
+class Norm():
     def __init__(self, m: float, sd: float) -> None:
         """
         Конструктор класса Norm.
