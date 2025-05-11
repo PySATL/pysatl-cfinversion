@@ -13,7 +13,7 @@ class Laplace(AbstractDistribution):
         self.m: float = m
         self.b: float = b
 
-    def cf_(self, x: NDArray[np.float64]) -> NDArray[np.complex128]:
+    def chr_(self, x: NDArray[np.float64]) -> NDArray[np.complex128]:
         """
         Characteristic Laplace distribution function.
 
