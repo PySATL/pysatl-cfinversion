@@ -1,26 +1,26 @@
 from abc import abstractmethod
 from typing import Callable, Union
-
 import numpy as np
+from numpy.typing import NDArray
 
 
 class ContinuousInverter:
     """Abstract class for characteristic function inverter"""
 
     @abstractmethod
-    def fit(self, phi: Callable) -> None:
+    def fit(self, cf: Callable) -> None:
         """Function for setting or changing characteristic function
 
         Attributes
         ----------
-        phi : Callable
+        cf : Callable
               characteristic function
         """
 
         raise NotImplementedError
 
     @abstractmethod
-    def cdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
+    def cdf(self, x: Union[float, NDArray[np.float64]]) -> Union[float, NDArray[np.float64]]:
         """Function return cumulative distribution function
 
         Attributes
@@ -37,7 +37,7 @@ class ContinuousInverter:
         raise NotImplementedError
 
     @abstractmethod
-    def pdf(self, x: np.ndarray) -> Union[float, np.ndarray]:
+    def pdf(self, x: Union[float, NDArray[np.float64]]) -> Union[float, NDArray[np.float64]]:
         """Function return probability density function
 
         Attributes
