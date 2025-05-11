@@ -1,9 +1,9 @@
 import numpy as np
-from numpy import exp
+from numpy.typing import NDArray
 from scipy.stats import norm
+from .abstract_distribution import AbstractDistribution
 
-
-class Norm():
+class Norm(AbstractDistribution):
     def __init__(self, m: float, sd: float) -> None:
         """
         Конструктор класса Norm.
@@ -14,16 +14,16 @@ class Norm():
         self.m = m
         self.sd = sd
 
-    def chr(self,  x: np.ndarray) -> np.ndarray:
+    def chr_(self, x: NDArray[np.float64]) -> NDArray[np.complex128]:
         """
         Метод для вычисления характеристической функции нормального распределения.
 
         :param x: аргумент характеристической функции
         :return: значение характеристической функции в точке x
         """
-        return exp(self.m * 1j * x - ((self.sd * x) ** 2 / 2))
+        return np.exp(self.m * 1j * x - ((self.sd * x) ** 2 / 2))
 
-    def cdf(self,  x: np.ndarray) -> np.ndarray:
+    def cdf_(self, x: NDArray[np.float64]) -> NDArray[np.float64]:
         """
         Метод для вычисления функции распределения (CDF) нормального распределения.
 
@@ -32,7 +32,7 @@ class Norm():
         """
         return norm.cdf(x, loc=self.m, scale=self.sd)
 
-    def pdf(self,  x: np.ndarray) -> np.ndarray:
+    def pdf_(self, x: NDArray[np.float64]) -> NDArray[np.float64]:
         """
         Метод для вычисления плотности вероятности (PDF) нормального распределения.
 
