@@ -30,10 +30,10 @@ class FFTInverter(ContinuousInverter):
         C = (self.dt / (2 * np.pi)) * np.exp(1j * self.T * self.Y)
 
         self.pdf_values = np.real(C * np.fft.fft(f)) #type: np.ndarray
-        self.pdf_interp = interp1d(self.Y, self.pdf_values, kind='linear')
+        self.pdf_interp = interp1d(self.Y, self.pdf_values, kind='linear', fill_value = 0, bounds_error=False)
 
         self.cdf_values = np.cumsum(self.pdf_values) * self.dy #type: np.ndarray
-        self.cdf_interp = interp1d(self.Y, self.cdf_values, kind='linear') 
+        self.cdf_interp = interp1d(self.Y, self.cdf_values, kind='linear', fill_value = (0,1), bounds_error=False)
 
     def cdf(self, x: float | NDArray[np.float64]) -> float | NDArray[np.float64]:
         if self.cf is None:
