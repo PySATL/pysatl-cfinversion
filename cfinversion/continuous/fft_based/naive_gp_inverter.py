@@ -9,7 +9,7 @@ class NaiveGPInverter(ContinuousInverter):
         super().__init__()
         self.N: int = int(N)
         self.delta: float = delta
-        self.num_points: int = int(N // delta) if num_points is None else num_points
+        self.num_points: int = int(N / delta) if num_points is None else num_points
 
     def fit(self, cf) -> None:
         """cf = characteristic function"""
@@ -23,7 +23,7 @@ class NaiveGPInverter(ContinuousInverter):
         tq = self.cf(t) * np.exp(-1j * t * x_arr[:, np.newaxis])
         tq[:, t != 0] /= (1j * t[t != 0])
         tq[:, t == 0] = -x_arr.reshape(-1,1)
-        result =  1 / 2 - (1 / (2 * np.pi)) * np.trapezoid(tq, t, axis=1)
+        result =  1 / 2 - (1 / (2 * np.pi)) * np.real(np.trapezoid(tq, t, axis=1))
         if isinstance(x, float):
             return result.item()
         return result
@@ -32,9 +32,9 @@ class NaiveGPInverter(ContinuousInverter):
             raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         x_arr = np.asarray(x)
         t = np.linspace(-self.N, self.N, self.num_points)
-        result = (1.0 / (2 * np. pi)) * np.trapezoid(
+        result = (1.0 / (2 * np. pi)) * np.real(np.trapezoid(
             self.cf(t) * np.exp(-1j * t * x_arr[:, np.newaxis]), t, axis=1
-        )
+        ))
         if isinstance(x, float):
             return result.item()
         return result
