@@ -14,13 +14,14 @@ class NaiveGPInverter(ContinuousInverter):
     def fit(self, cf) -> None:
         """cf = characteristic function"""
         self.cf = cf
-
+        self.t = np.linspace(-self.N, self.N, self.num_points)
+        self.cf_values = self.cf(self.t)
     def cdf(self, x: float | NDArray[np.float64]) -> float | NDArray[np.float64]:
         if self.cf is None:
             raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         x_arr = np.asarray(x)
-        t = np.linspace(-self.N, self.N, self.num_points)
-        tq = self.cf(t) * np.exp(-1j * t * x_arr[:, np.newaxis])
+        t = self.t
+        tq = self.cf_values * np.exp(-1j * t * x_arr[:, np.newaxis])
         tq[:, t != 0] /= (1j * t[t != 0])
         tq[:, t == 0] = -x_arr.reshape(-1,1)
         result =  1 / 2 - (1 / (2 * np.pi)) * np.real(np.trapezoid(tq, t, axis=1))
@@ -31,9 +32,9 @@ class NaiveGPInverter(ContinuousInverter):
         if self.cf is None:
             raise ValueError("Characteristic function (phi) is not set. Call fit() first.")
         x_arr = np.asarray(x)
-        t = np.linspace(-self.N, self.N, self.num_points)
+        t = self.t
         result = (1.0 / (2 * np. pi)) * np.real(np.trapezoid(
-            self.cf(t) * np.exp(-1j * t * x_arr[:, np.newaxis]), t, axis=1
+            self.cf_values * np.exp(-1j * t * x_arr[:, np.newaxis]), t, axis=1
         ))
         if isinstance(x, float):
             return result.item()
