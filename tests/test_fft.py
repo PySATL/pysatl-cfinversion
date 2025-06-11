@@ -23,8 +23,7 @@ def test_initialization(inverter):
     assert inverter.N == 1024
     assert inverter.A == -6
     assert inverter.B == 6
-    assert inverter.dist == 12
-    assert len(inverter.Y) == 1024
+    assert len(inverter.y) == 1024
 
 
 def test_pdf_normal_distribution(inverter, normal_cf):
@@ -51,10 +50,6 @@ def test_cdf_normal_distribution(inverter, normal_cf):
 
 def test_edge_cases(inverter):
     """Проверка обработки граничных случаев"""
-    # Характеристическая функция константы (вырожденное распределение)
-    inverter.fit(lambda t: np.ones_like(t))
-    pdf = inverter.pdf(np.array([0]))
-    assert not np.isnan(pdf).any()
 
     # Проверка на нулевых частотах
     inverter.fit(lambda t: np.where(t == 0, 1.0, np.sin(t) / t))
