@@ -3,7 +3,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.interpolate import interp1d
 from ..continuous_inverter import ContinuousInverter
-
+from ...tools import Standardizer
 
 class FFTInverter(ContinuousInverter):
 
@@ -12,28 +12,41 @@ class FFTInverter(ContinuousInverter):
         self.N: int = int(N)
         self.A: float = A
         self.B: float = B
-        self.dist = B - A
-        self.dy = self.dist / N
-        self.dt = (2 * np.pi) / self.dist
-        self.T = (N / 2) * self.dt
-        self.k = np.arange(N)
+        self.D: float = B - A
+        self.dy = self.D / N
+        self.du = 1 / self.D
+        self.dt = 2 * np.pi * self.du
+        self.T = N * self.du / 2
+
         self.j = np.arange(N)
-        self.Y = A + self.k * self.dy
-        self.t = -self.T + self.j * self.dt
-        self.phi = None #type: Callable[[np.ndarray], np.ndarray] | None
+        self.u =  -self.T + self.j * self.du
+        self.t = 2 * np.pi * self.u
+
+        self.k = np.arange(N)
+        self.y = self.A + self.k * self.dy
+        
+        self.stdr = Standardizer()
 
     def fit(self, cf: Callable) -> None:
         """cf = characteristic function"""
-        self.cf = cf
+        self.stdr.fit(cf)
+        self.cf = self.stdr.cf
+        
+        tmask = (self.t != 0)
+        C = np.exp(2 * np.pi * 1.0j * self.T * self.y) * self.du
+        
+        f_pdf = np.exp(-1j * self.j * self.dt * self.A) * self.cf(self.t)
+        
+        f_cdf = np.zeros_like(f_pdf)
+        f_cdf[tmask]   = np.exp(-1j * self.j[tmask] * self.dt * self.A) * self.cf(self.t[tmask]) / self.t[tmask]
+        f_cdf[~tmask]  = 0
+        
+        self.pdf_values = np.real(C * np.fft.fft(f_pdf)) #type: np.ndarray
+        self.pdf_interp = self.stdr.unstandardize_pdf(interp1d(self.y, self.pdf_values, kind='linear', fill_value = 0, bounds_error=False))
 
-        f = np.exp(-1j * self.j * self.dt * self.A) * self.cf(self.t)
-        C = (self.dt / (2 * np.pi)) * np.exp(1j * self.T * self.Y)
-
-        self.pdf_values = np.real(C * np.fft.fft(f)) #type: np.ndarray
-        self.pdf_interp = interp1d(self.Y, self.pdf_values, kind='linear')
-
-        self.cdf_values = np.cumsum(self.pdf_values) * self.dy #type: np.ndarray
-        self.cdf_interp = interp1d(self.Y, self.cdf_values, kind='linear') 
+        self.cdf_values = 0.5 - np.imag(C * np.fft.fft(f_cdf)) #type: np.ndarray
+        self.cdf_values += self.y * self.du # I have absolutely no idea why this works, but it works though
+        self.cdf_interp = self.stdr.unstandardize_cdf(interp1d(self.y, self.cdf_values, kind='linear', fill_value = (0,1), bounds_error=False))
 
     def cdf(self, x: float | NDArray[np.float64]) -> float | NDArray[np.float64]:
         if self.cf is None:
